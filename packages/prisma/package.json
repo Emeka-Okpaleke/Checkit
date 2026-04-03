@@ -1,0 +1,21 @@
+{
+  "name": "@assessment/prisma",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./generated/client/index.js",
+  "types": "./generated/client/index.d.ts",
+  "scripts": {
+    "generate": "prisma generate",
+    "migrate:dev": "env-cmd -f ../../.env -- prisma migrate dev",
+    "migrate:deploy": "env-cmd -f ../../.env -- prisma migrate deploy",
+    "studio": "env-cmd -f ../../.env -- prisma studio"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0"
+  },
+  "devDependencies": {
+    "env-cmd": "^10.1.0",
+    "prisma": "^5.22.0",
+    "typescript": "^5.6.3"
+  }
+}
