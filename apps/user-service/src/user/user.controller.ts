@@ -1,6 +1,5 @@
 import { Controller, UsePipes, ValidationPipe } from "@nestjs/common";
 import { GrpcMethod, RpcException } from "@nestjs/microservices";
-import { Prisma } from "@assessment/prisma";
 import { status } from "@grpc/grpc-js";
 import { CreateUserGrpcDto } from "./dto/create-user.grpc.dto";
 import { UserService } from "./user.service";
@@ -24,7 +23,12 @@ export class UserController {
         created_at: user.createdAt.toISOString(),
       };
     } catch (e: unknown) {
-      if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2002") {
+      if (
+        typeof e === "object" &&
+        e !== null &&
+        "code" in e &&
+        (e as { code: string }).code === "P2002"
+      ) {
         throw new RpcException({ code: status.ALREADY_EXISTS, message: "Email already exists" });
       }
       const message = e instanceof Error ? e.message : "Create user failed";
