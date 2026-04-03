@@ -81,7 +81,13 @@ Build all packages:
 npm run build
 ```
 
-## gRPC testing (grpcurl)
+## API testing
+
+### Postman (gRPC)
+
+Import **`postman/Wallet-Assessment.postman_collection.json`** and **`postman/Wallet-Assessment.postman_environment.json`**, then follow **[postman/README.md](postman/README.md)** (native gRPC is configured in the app; the JSON collection documents each RPC because Postman’s gRPC export is limited).
+
+### grpcurl
 
 Install [grpcurl](https://github.com/fullstorydev/grpcurl). From the repository root:
 

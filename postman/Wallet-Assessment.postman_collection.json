@@ -1,0 +1,110 @@
+{
+	"info": {
+		"_postman_id": "b2c3d4e5-wallet-assessment-coll",
+		"name": "Wallet Assessment (gRPC)",
+		"description": "## How to use this collection\n\nThese microservices expose **gRPC only** (not HTTP). Postman often **cannot export native gRPC requests** to JSON, so each item is a small **HTTP stub** (to httpbin) whose **description** holds the real **gRPC message** and **grpcurl** command.\n\n1. **Import** this file and `Wallet-Assessment.postman_environment.json`.\n2. Select the **Wallet Assessment (local)** environment.\n3. For invoking gRPC in Postman: **New → gRPC**, URL = `{{userGrpcUrl}}` or `{{walletGrpcUrl}}`, import `packages/proto/proto/user.proto` or `wallet.proto`, choose the method, paste the JSON from the matching stub’s description.\n4. After **CreateUser**, copy `id` into environment variable **userId**.\n5. After **CreateWallet** (or Prisma Studio), set **walletId**.\n\n**Start order:** wallet-service, then user-service.\n",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User service",
+			"item": [
+				{
+					"name": "CreateUser",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://httpbin.org/status/200",
+							"protocol": "https",
+							"host": ["httpbin", "org"],
+							"path": ["status", "200"]
+						},
+						"description": "### gRPC — `user.UserService` / `CreateUser`\n\n**Server URL (Postman gRPC):** `{{userGrpcUrl}}`\n\n**Proto:** `packages/proto/proto/user.proto`\n\n**Message (JSON):**\n```json\n{\n  \"email\": \"alice@example.com\",\n  \"name\": \"Alice\"\n}\n```\n\n**grpcurl** (run from repo root; PowerShell):\n```\ngrpcurl -plaintext `\n  -import-path packages/proto/proto -proto user.proto `\n  -d '{\"email\":\"alice@example.com\",\"name\":\"Alice\"}' `\n  127.0.0.1:50051 user.UserService/CreateUser\n```\n"
+					},
+					"response": []
+				},
+				{
+					"name": "GetUserById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://httpbin.org/status/200",
+							"protocol": "https",
+							"host": ["httpbin", "org"],
+							"path": ["status", "200"]
+						},
+						"description": "### gRPC — `user.UserService` / `GetUserById`\n\n**Server URL:** `{{userGrpcUrl}}`\n\n**Proto:** `packages/proto/proto/user.proto`\n\n**Message (JSON):** set `id` to `{{userId}}` or paste a UUID.\n```json\n{\n  \"id\": \"YOUR-USER-UUID\"\n}\n```\n\n**grpcurl:**\n```\ngrpcurl -plaintext `\n  -import-path packages/proto/proto -proto user.proto `\n  -d '{\"id\":\"YOUR-USER-UUID\"}' `\n  127.0.0.1:50051 user.UserService/GetUserById\n```\n"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Wallet service",
+			"item": [
+				{
+					"name": "CreateWallet",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://httpbin.org/status/200",
+							"protocol": "https",
+							"host": ["httpbin", "org"],
+							"path": ["status", "200"]
+						},
+						"description": "### gRPC — `wallet.WalletService` / `CreateWallet`\n\n**Server URL:** `{{walletGrpcUrl}}`\n\n**Proto:** `packages/proto/proto/wallet.proto` (import root: `packages/proto/proto`)\n\n**Message (JSON):**\n```json\n{\n  \"user_id\": \"YOUR-USER-UUID\"\n}\n```\nUse `{{userId}}` in Postman after CreateUser.\n\n**grpcurl:**\n```\ngrpcurl -plaintext `\n  -import-path packages/proto/proto -proto wallet.proto `\n  -d '{\"user_id\":\"YOUR-USER-UUID\"}' `\n  127.0.0.1:50052 wallet.WalletService/CreateWallet\n```\n"
+					},
+					"response": []
+				},
+				{
+					"name": "GetWallet",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://httpbin.org/status/200",
+							"protocol": "https",
+							"host": ["httpbin", "org"],
+							"path": ["status", "200"]
+						},
+						"description": "### gRPC — `wallet.WalletService` / `GetWallet`\n\n**Server URL:** `{{walletGrpcUrl}}`\n\n**Proto:** `packages/proto/proto/wallet.proto`\n\n**Message (JSON):**\n```json\n{\n  \"id\": \"YOUR-WALLET-UUID\"\n}\n```\nUse env `{{walletId}}` when you have it.\n\n**grpcurl:**\n```\ngrpcurl -plaintext `\n  -import-path packages/proto/proto -proto wallet.proto `\n  -d '{\"id\":\"YOUR-WALLET-UUID\"}' `\n  127.0.0.1:50052 wallet.WalletService/GetWallet\n```\n"
+					},
+					"response": []
+				},
+				{
+					"name": "CreditWallet",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://httpbin.org/status/200",
+							"protocol": "https",
+							"host": ["httpbin", "org"],
+							"path": ["status", "200"]
+						},
+						"description": "### gRPC — `wallet.WalletService` / `CreditWallet`\n\n**Server URL:** `{{walletGrpcUrl}}`\n\n**Proto:** `packages/proto/proto/wallet.proto`\n\n**Message (JSON):**\n```json\n{\n  \"id\": \"YOUR-WALLET-UUID\",\n  \"amount\": \"100.50\"\n}\n```\n`amount` is a **string** decimal.\n\n**grpcurl:**\n```\ngrpcurl -plaintext `\n  -import-path packages/proto/proto -proto wallet.proto `\n  -d '{\"id\":\"YOUR-WALLET-UUID\",\"amount\":\"100.50\"}' `\n  127.0.0.1:50052 wallet.WalletService/CreditWallet\n```\n"
+					},
+					"response": []
+				},
+				{
+					"name": "DebitWallet",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://httpbin.org/status/200",
+							"protocol": "https",
+							"host": ["httpbin", "org"],
+							"path": ["status", "200"]
+						},
+						"description": "### gRPC — `wallet.WalletService` / `DebitWallet`\n\n**Server URL:** `{{walletGrpcUrl}}`\n\n**Proto:** `packages/proto/proto/wallet.proto`\n\n**Message (JSON):**\n```json\n{\n  \"id\": \"YOUR-WALLET-UUID\",\n  \"amount\": \"25\"\n}\n```\n\n**grpcurl:**\n```\ngrpcurl -plaintext `\n  -import-path packages/proto/proto -proto wallet.proto `\n  -d '{\"id\":\"YOUR-WALLET-UUID\",\"amount\":\"25\"}' `\n  127.0.0.1:50052 wallet.WalletService/DebitWallet\n```\n"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
