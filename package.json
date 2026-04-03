@@ -6,9 +6,11 @@
     "packages/*"
   ],
   "scripts": {
+    "postinstall": "npm run db:generate",
     "build": "npm run build --workspaces --if-present",
     "db:generate": "npm run generate -w @assessment/prisma",
     "db:migrate": "npm run migrate:dev -w @assessment/prisma",
+    "db:migrate:deploy": "npm run migrate:deploy -w @assessment/prisma",
     "user:dev": "npm run start:dev -w @assessment/user-service",
     "wallet:dev": "npm run start:dev -w @assessment/wallet-service"
   },
